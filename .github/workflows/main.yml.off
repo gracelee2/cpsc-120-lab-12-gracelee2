@@ -1,0 +1,23 @@
+name: A Docker-less workflow for CPSC 120
+on: push
+
+jobs:
+  build:
+    name: Lab actions for CPSC 120
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      #- name: ID
+      #  run: id
+      - name: Header Check - Make sure the file(s) have the correct header
+        run: python3 .action/header_check.py hello_world.cc
+      - name: Format Check - Make sure the files adhere to Google C++ style
+        run: python3 .action/format_check.py hello_world.cc
+      - name: Lint Check - Make sure the files follow good coding practices
+        run: python3 .action/lint_check.py hello_world.cc
+      - name: Build Check - Make sure the files compile
+        run: python3 .action/build_check.py hello_world.cc
+      - name: Run Check
+        run: python3 .action/run_check.py asgt
+      #- name: Check Solution
+      #  run: python3 .action/solution_check.py hello_world.cc /home/mshafae/github/cpsc120/cpsc-120-prompt-lab-00/hello_world.cc

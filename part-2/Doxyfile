@@ -1,0 +1,12 @@
+# This file describes the settings to be used by the documentation system
+# doxygen (www.doxygen.org) for a project.
+
+DOXYFILE_ENCODING      = UTF-8
+
+#PROJECT_NAME           = CPSC 120 Lab
+
+OUTPUT_DIRECTORY       = doc
+
+GENERATE_LATEX         = NO
+
+USE_MDFILE_AS_MAINPAGE = README.md
