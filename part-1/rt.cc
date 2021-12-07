@@ -1,4 +1,13 @@
-
+// Grace Lee
+// CPSC 120-01
+// 2021-10-28
+// grace1@csu.fullerton.edu
+// @gracelee2
+//
+// Lab 08-01
+//
+// This program makes a word appear on a black screen
+//
 /// \file
 
 #include <Magick++.h>
@@ -33,10 +42,17 @@ bool CoinFlip() { return RandomDouble_11() > 0.0; }
 /// out as a GIF file.
 int main(int argc, char const* argv[]) {
   InitializeMagick(*argv);
-  // TODO: Process the command line arguemnts. Save args.at(1) to 
+  auto args = vector<string>(argv, argv + argc);
+  if (args.size() < 2) {
+    cout << "Please provide a path to a file.\n";
+    exit(1);
+  }
+  // TODO: Process the command line arguemnts. Save args.at(1) to
   // output_file_name and args.at(2) to message.
   string output_file_name;
   string message;
+  output_file_name = args.at(1);
+  message = args.at(2);
 
   // Check to make sure the user specified a GIF/gif file.
   if (not HasFileExtension(output_file_name, ".gif") &&
@@ -70,6 +86,7 @@ int main(int argc, char const* argv[]) {
   // going on.
   cout << "Your image has " << image.columns() << " columns (x direction) and "
        << image.rows() << " rows (y direction).\n";
+  const int kNumberOfImages = 10;
 
   // TODO: Define a const int named kNumberOfImages and assign it 10.
 
@@ -80,7 +97,35 @@ int main(int argc, char const* argv[]) {
   // be calculated.
   chrono::time_point<chrono::high_resolution_clock> start =
       chrono::high_resolution_clock::now();
+  for(int i = 0; i < kNumberOfImages; i++){
+    for(int column = int(image.columns() - 1); column >= 0; column--){
+      for(int row = 0; row < image.rows(); row++){
+        assert(row < image.rows());
+        assert(column < image.columns());
+        double random_color_intensity = RandomDouble_01();
+        double red = 0.0;
+        double green = 0.0;
+        double blue = 0.0;
+        if (CoinFlip()) {
+          red = random_value;
+        }
+        if (CoinFlip()) {
+          green = random_value;
+        }
+        if (CoinFlip()) {
+        blue = random_value;
+        ColorRGB color(red, green, blue);
+        image.pixelColor(column, row, pixel_color);
+        }
+      }
+    }
+    image.font("Helvetica");
+    image.fontPointsize(72);
+    image.fillColor(Color("yellow"));
+    image.annotate(message, CenterGravity);
 
+    images.push_back(image);
+  }
   // TODO: Write a triply nested for loop.
   //  - The outer most loop is the loop that controls how many images are
   //    created.
@@ -93,18 +138,11 @@ int main(int argc, char const* argv[]) {
   // be true and if it isn't then the program is going to halt with an
   // error message. If your program halts, then you know you have
   // something wrong with your for loop counters.
-  // assert(row < image.rows());
-  // assert(column < image.columns());
-
 
   // The random_value is the intensity of the color at the
   // current pixel. Flip a coin to decide which channel is active.
   // It could be zero, one, two, or three channels that are assigned
   // random_value.
-  double random_color_intensity = RandomDouble_01();
-  double red = 0.0;
-  double green = 0.0;
-  double blue = 0.0;
 
   // TODO: Following the guidance from the README, determine what value
   // to assign red, green, and blue using the CoinFlip() function.
@@ -125,12 +163,6 @@ int main(int argc, char const* argv[]) {
   // to the generated image and to add the image into our vector of images.
   // Let's write some text into the center of the image. This requires
   // Ghostscript which should already be installed on your computer.
-  // image.font("Helvetica");
-  // image.fontPointsize(72);
-  // image.fillColor(Color("yellow"));
-  // image.annotate(message, CenterGravity);
-  //
-  // images.push_back(image);
 
   // Our work is done, save the ending time
   chrono::time_point<chrono::high_resolution_clock> end =
@@ -138,7 +170,7 @@ int main(int argc, char const* argv[]) {
 
   // TODO: Write the images to an output file, for example
   // writeImages(images.begin(), images.end(), output_file_name);
-
+  image.write(output_file_name);
   // Calculate the elapsed time by taking the difference between end
   // and start.
   chrono::duration<double> elapsed_seconds = end - start;
