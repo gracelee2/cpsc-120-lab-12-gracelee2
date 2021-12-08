@@ -43,12 +43,11 @@ bool CoinFlip() { return RandomDouble_11() > 0.0; }
 int main(int argc, char const* argv[]) {
   InitializeMagick(*argv);
   auto args = vector<string>(argv, argv + argc);
-  if (args.size() < 2) {
-    cout << "Please provide a path to a file.\n";
+  if (args.size() < 3) {
+    cout << "Please provide a path to a file and a brief message.\n";
     exit(1);
   }
-  // TODO: Process the command line arguemnts. Save args.at(1) to
-  // output_file_name and args.at(2) to message.
+
   string output_file_name;
   string message;
   output_file_name = args.at(1);
@@ -88,8 +87,6 @@ int main(int argc, char const* argv[]) {
        << image.rows() << " rows (y direction).\n";
   const int kNumberOfImages = 10;
 
-  // TODO: Define a const int named kNumberOfImages and assign it 10.
-
   // This vector will store each frame of our animated GIF.
   vector<Image> images;
 
@@ -97,9 +94,9 @@ int main(int argc, char const* argv[]) {
   // be calculated.
   chrono::time_point<chrono::high_resolution_clock> start =
       chrono::high_resolution_clock::now();
-  for(int i = 0; i < kNumberOfImages; i++){
-    for(int column = int(image.columns() - 1); column >= 0; column--){
-      for(int row = 0; row < image.rows(); row++){
+  for (int i = 0; i < kNumberOfImages; i++) {
+    for (int column = int(image.columns() - 1); column >= 0; column--) {
+      for (int row = 0; row < image.rows(); row++) {
         assert(row < image.rows());
         assert(column < image.columns());
         double random_color_intensity = RandomDouble_01();
@@ -107,15 +104,15 @@ int main(int argc, char const* argv[]) {
         double green = 0.0;
         double blue = 0.0;
         if (CoinFlip()) {
-          red = random_value;
+          red = rand();
         }
         if (CoinFlip()) {
-          green = random_value;
+          green = rand();
         }
         if (CoinFlip()) {
-        blue = random_value;
-        ColorRGB color(red, green, blue);
-        image.pixelColor(column, row, pixel_color);
+          blue = rand();
+          ColorRGB pixel_color(red, green, blue);
+          image.pixelColor(column, row, pixel_color);
         }
       }
     }
@@ -126,11 +123,6 @@ int main(int argc, char const* argv[]) {
 
     images.push_back(image);
   }
-  // TODO: Write a triply nested for loop.
-  //  - The outer most loop is the loop that controls how many images are
-  //    created.
-  //  - The middle loop is for each column in the image
-  //  - The inner most loop is for each row in the image
 
   // Use this at the top of your inner most for loop to help catch errors.
   // This is a way to make sure you don't accidentally have the wrong
@@ -144,32 +136,16 @@ int main(int argc, char const* argv[]) {
   // It could be zero, one, two, or three channels that are assigned
   // random_value.
 
-  // TODO: Following the guidance from the README, determine what value
-  // to assign red, green, and blue using the CoinFlip() function.
-
-  // TODO: Create a new ColorRGB variable named pixel_color and construct it
-  // with the values from red, green, and blue.
-
   // It may help you to debug what you are doing by printing
   // each pixel out. Remember you can always resize the image to be
   // something smaller by changing kImageWidth and recompiling.
   // Remember column is the x direction and row is the y direction.
   // cout << column << ":" << row << " " << pixel_color << "\n";
 
-  // TODO: Set the color for pixel(row, column) to the calculated color,
-  // for example: image.pixelColor(column, row, pixel_color);
-
-  // TODO: Add this code to the end of the outermost for loop to add text
-  // to the generated image and to add the image into our vector of images.
-  // Let's write some text into the center of the image. This requires
-  // Ghostscript which should already be installed on your computer.
-
   // Our work is done, save the ending time
   chrono::time_point<chrono::high_resolution_clock> end =
       chrono::high_resolution_clock::now();
 
-  // TODO: Write the images to an output file, for example
-  // writeImages(images.begin(), images.end(), output_file_name);
   image.write(output_file_name);
   // Calculate the elapsed time by taking the difference between end
   // and start.
