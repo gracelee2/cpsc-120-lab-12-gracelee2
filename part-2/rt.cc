@@ -1,4 +1,13 @@
-
+// Grace Lee
+// CPSC 120-01
+// 2021-10-28
+// grace1@csu.fullerton.edu
+// @gracelee2
+//
+// Lab 08-01
+//
+// This program determines the color of the ray
+//
 /// \file
 
 #include <Magick++.h>
@@ -44,9 +53,15 @@ ColorRGB RayColor(const Ray& r) {
 /// image file such as png, jpg, jpeg, gif, etc.
 int main(int argc, char const* argv[]) {
   InitializeMagick(*argv);
+  auto args = vector<string>(argv, argv + argc);
+  if (args.size() < 3) {
+    cout << "Please provide a path to a file and a brief message.\n";
+    exit(1);
+  }
   // TODO: Process the command line arguemnts. Save args.at(1) to
   // output_file_name.
   string output_file_name;
+  output_file_name = args.at(1);
 
   /// Image definition in main
   /// The image is the output from the virtual camera. The image is what
@@ -123,15 +138,19 @@ int main(int argc, char const* argv[]) {
   //    created.
   //  - The middle loop is for each column in the image
   //  - The inner most loop is for each row in the image
-
+  for (int column = int(image.columns() - 1); column >= 0; column--) {
+    for (int row = 0; row < image.rows(); row++) {
+      assert(row < image.rows());
+      assert(column < image.columns());
+}
+}
   // Use this at the top of your inner most for loop to help catch errors.
   // This is a way to make sure you don't accidentally have the wrong
   // logic in your for loops. What an assertion does is it says this must
   // be true and if it isn't then the program is going to halt with an
   // error message. If your program halts, then you know you have
   // something wrong with your for loop counters.
-  // assert(row < image.rows());
-  // assert(column < image.columns());
+
 
   // u is the distance from the left edge of the image to the right
   // edge of the image measured as a percentage.
@@ -146,19 +165,20 @@ int main(int argc, char const* argv[]) {
   // TODO: Assign u as the ratio of the current column to the total number of
   // columns.
   double u = NAN;
+  u = column/ image.columns();
   // TODO: Assign v as the ratio of the current row to the total number of rows.
   double v = NAN;
-
+  v = row/ image.rows();
   // TODO: Declare and construct Ray r that starts at the camera's center,
   // the origin (kOrigin), and travels through the pixel center defined by
   // kLowerLeftCorner + u * kHorizontal + v * kVertical - kOrigin
   Ray r;
-
+  r = kLowerLeftCorner + u * kHorizontal + v * kVertical - kOrigin;
   // TODO: Calculate and return the color at the pixel that Ray r
   // points through and assign it to pixel_color. Use the
   // fucntion RayColor()
   ColorRGB pixel_color;
-
+  
   // It may help you to debug what you are doing by printing
   // each pixel out. Remember you can always resize the image to be
   // something smaller by changing kImageWidth and recompiling.
@@ -174,7 +194,7 @@ int main(int argc, char const* argv[]) {
 
   // TODO: Write the images to an output file, for example
   // image.write(output_file_name);
-
+image.write(output_file_name)
   // Calculate the elapsed time by taking the difference between end
   // and start.
   chrono::duration<double> elapsed_seconds = end - start;
