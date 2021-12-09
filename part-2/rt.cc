@@ -43,7 +43,9 @@ ColorRGB RayColor(const Ray& r) {
   ColorRGB sky_top(.5, .4, 0);
   // Bluish purple
   ColorRGB sky_bottom(.2, .1, .5);
-  c = (1.0 - r) * sky_bottom + r * sky_top;
+  Vec3 unit_direction = UnitVector(r.direction());
+  double t = 0.5 * (unit_direction.y() + 1.0);
+  c = (1.0 - t) * sky_bottom + t * sky_top;
   // TODO: Calculate the color c that is visible to Ray r.
   return c;
 }
@@ -151,7 +153,7 @@ int main(int argc, char const* argv[]) {
       r = kLowerLeftCorner + u * kHorizontal + v * kVertical - kOrigin;
       ColorRGB pixel_color;
       pixel_color = RayColor(r);
-      image.pixelColor(column, row, r);
+      image.pixel_color(column, row, r);
 }
 }
   // Use this at the top of your inner most for loop to help catch errors.
