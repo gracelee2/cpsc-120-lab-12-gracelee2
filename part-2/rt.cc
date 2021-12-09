@@ -43,7 +43,7 @@ ColorRGB RayColor(const Ray& r) {
   ColorRGB sky_top(.5, .4, 0);
   // Bluish purple
   ColorRGB sky_bottom(.2, .1, .5);
-  c = (1.0 - t) * sky_bottom + t * sky_top;
+  c = (1.0 - r) * sky_bottom + r * sky_top;
   // TODO: Calculate the color c that is visible to Ray r.
   return c;
 }
@@ -151,6 +151,7 @@ int main(int argc, char const* argv[]) {
       r = kLowerLeftCorner + u * kHorizontal + v * kVertical - kOrigin;
       ColorRGB pixel_color;
       pixel_color = RayColor(r);
+      image.pixelColor(column, row, r);
 }
 }
   // Use this at the top of your inner most for loop to help catch errors.
@@ -191,7 +192,7 @@ int main(int argc, char const* argv[]) {
   // cout << column << ":" << row << " " << pixel_color << "\n";
 
   // TODO: Set the color for pixel(row, column) to the calculated color,
-  image.pixelColor(column, row, r);
+  //image.pixelColor(column, row, r);
 
   // Our work is done, save the ending time
   chrono::time_point<chrono::high_resolution_clock> end =
@@ -199,7 +200,7 @@ int main(int argc, char const* argv[]) {
 
   // TODO: Write the images to an output file, for example
 // image.write(output_file_name);
-image.write(output_file_name)
+image.write(output_file_name);
   // Calculate the elapsed time by taking the difference between end
   // and start.
   chrono::duration<double> elapsed_seconds = end - start;
