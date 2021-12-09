@@ -43,6 +43,7 @@ ColorRGB RayColor(const Ray& r) {
   ColorRGB sky_top(.5, .4, 0);
   // Bluish purple
   ColorRGB sky_bottom(.2, .1, .5);
+  c = (1.0 - t) * sky_bottom + t * sky_top;
   // TODO: Calculate the color c that is visible to Ray r.
   return c;
 }
@@ -142,6 +143,14 @@ int main(int argc, char const* argv[]) {
     for (int row = 0; row < image.rows(); row++) {
       assert(row < image.rows());
       assert(column < image.columns());
+      double u = NAN;
+      u = column/ image.columns()-1;
+      double v = NAN;
+      v = row/ image.rows()-1;
+      Ray r;
+      r = kLowerLeftCorner + u * kHorizontal + v * kVertical - kOrigin;
+      ColorRGB pixel_color;
+      pixel_color = RayColor(r);
 }
 }
   // Use this at the top of your inner most for loop to help catch errors.
@@ -164,21 +173,17 @@ int main(int argc, char const* argv[]) {
   // The same is true for v
   // TODO: Assign u as the ratio of the current column to the total number of
   // columns.
-  double u = NAN;
-  u = column/ image.columns();
+
   // TODO: Assign v as the ratio of the current row to the total number of rows.
-  double v = NAN;
-  v = row/ image.rows();
+
   // TODO: Declare and construct Ray r that starts at the camera's center,
   // the origin (kOrigin), and travels through the pixel center defined by
   // kLowerLeftCorner + u * kHorizontal + v * kVertical - kOrigin
-  Ray r;
-  r = kLowerLeftCorner + u * kHorizontal + v * kVertical - kOrigin;
+
   // TODO: Calculate and return the color at the pixel that Ray r
   // points through and assign it to pixel_color. Use the
   // fucntion RayColor()
-  ColorRGB pixel_color;
-  
+
   // It may help you to debug what you are doing by printing
   // each pixel out. Remember you can always resize the image to be
   // something smaller by changing kImageWidth and recompiling.
@@ -186,14 +191,14 @@ int main(int argc, char const* argv[]) {
   // cout << column << ":" << row << " " << pixel_color << "\n";
 
   // TODO: Set the color for pixel(row, column) to the calculated color,
-  // for example: image.pixelColor(column, row, pixel_color);
+  image.pixelColor(column, row, r);
 
   // Our work is done, save the ending time
   chrono::time_point<chrono::high_resolution_clock> end =
       chrono::high_resolution_clock::now();
 
   // TODO: Write the images to an output file, for example
-  // image.write(output_file_name);
+// image.write(output_file_name);
 image.write(output_file_name)
   // Calculate the elapsed time by taking the difference between end
   // and start.
