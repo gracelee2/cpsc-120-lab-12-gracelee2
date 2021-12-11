@@ -37,6 +37,7 @@ using namespace Magick;
 ///
 /// \param r A ray eminating from the camera through the scene
 /// \returns The color visible from that ray
+
 ColorRGB RayColor(const Ray& r) {
   ColorRGB c;
   // Greenish brown
@@ -58,13 +59,15 @@ int main(int argc, char const* argv[]) {
   InitializeMagick(*argv);
   auto args = vector<string>(argv, argv + argc);
   if (args.size() < 3) {
-    cout << "Please provide a path to a file and a brief message.\n";
+    cout << "Please provide a path to a file.\n";
     exit(1);
+
   }
   // TODO: Process the command line arguemnts. Save args.at(1) to
   // output_file_name.
   string output_file_name;
   output_file_name = args.at(1);
+
 
   /// Image definition in main
   /// The image is the output from the virtual camera. The image is what
@@ -141,6 +144,7 @@ int main(int argc, char const* argv[]) {
   //    created.
   //  - The middle loop is for each column in the image
   //  - The inner most loop is for each row in the image
+
   for (int column = int(image.columns() - 1); column >= 0; column--) {
     for (int row = 0; row < image.rows(); row++) {
       assert(row < image.rows());
@@ -149,13 +153,14 @@ int main(int argc, char const* argv[]) {
       u = column/ image.columns()-1;
       double v = NAN;
       v = row/ image.rows()-1;
-      Ray r;
-      r = kLowerLeftCorner + u * kHorizontal + v * kVertical - kOrigin;
+      Vec3 point_in_image_plane = kLowerLeftCorner + u * kHorizontal + v * kVertical;
+      Ray r(kOrigin, point_in_image_plane - kOrigin);
       ColorRGB pixel_color;
       pixel_color = RayColor(r);
-      image.pixel_color(column, row, r);
+      image.pixelColor(column, row, pixel_color);
 }
 }
+
   // Use this at the top of your inner most for loop to help catch errors.
   // This is a way to make sure you don't accidentally have the wrong
   // logic in your for loops. What an assertion does is it says this must
